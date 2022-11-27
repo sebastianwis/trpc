@@ -31,8 +31,13 @@ export async function nodeHTTPRequestHandler<
     return await opts.createContext?.(opts);
   };
   const { path, router } = opts;
+  console.log({
+    body: opts.req.body,
+    headers: opts.req.headers,
+  });
 
   const bodyResult = await getPostBody(opts);
+  console.log('heyhey', { bodyResult });
 
   const query = opts.req.query
     ? new URLSearchParams(opts.req.query as any)

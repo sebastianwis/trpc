@@ -19,6 +19,7 @@ export async function getPostBody({
     let hasBody = false;
     req.on('data', function (data) {
       body += data;
+
       hasBody = true;
       if (typeof maxBodySize === 'number' && body.length > maxBodySize) {
         resolve({
@@ -29,6 +30,9 @@ export async function getPostBody({
       }
     });
     req.on('end', () => {
+      console.log('------------------');
+      console.log({ body });
+      console.log('------------------');
       resolve({
         ok: true,
         data: hasBody ? body : undefined,

@@ -80,30 +80,32 @@ const IndexPage: NextPageWithLayout = () => {
       <h3>Add a Post</h3>
 
       <form
-        onSubmit={async (e) => {
-          /**
-           * In a real app you probably don't want to use this manually
-           * Checkout React Hook Form - it works great with tRPC
-           * @see https://react-hook-form.com/
-           * @see https://kitchen-sink.trpc.io/react-hook-form
-           */
-          e.preventDefault();
-          const $form = e.currentTarget;
-          const values = Object.fromEntries(new FormData($form));
-          type Input = inferProcedureInput<AppRouter['post']['add']>;
-          //    ^?
-          const input: Input = {
-            title: values.title as string,
-            text: values.text as string,
-          };
-          try {
-            await addPost.mutateAsync(input);
+        action={`/api/trpc/${addPost.trpc.path}`}
+        method="POST"
+        // onSubmit={async (e) => {
+        //   /**
+        //    * In a real app you probably don't want to use this manually
+        //    * Checkout React Hook Form - it works great with tRPC
+        //    * @see https://react-hook-form.com/
+        //    * @see https://kitchen-sink.trpc.io/react-hook-form
+        //    */
+        //   e.preventDefault();
+        //   const $form = e.currentTarget;
+        //   const values = Object.fromEntries(new FormData($form));
+        //   type Input = inferProcedureInput<AppRouter['post']['add']>;
+        //   //    ^?
+        //   const input: Input = {
+        //     title: values.title as string,
+        //     text: values.text as string,
+        //   };
+        //   try {
+        //     await addPost.mutateAsync(input);
 
-            $form.reset();
-          } catch (cause) {
-            console.error({ cause }, 'Failed to add post');
-          }
-        }}
+        //     $form.reset();
+        //   } catch (cause) {
+        //     console.error({ cause }, 'Failed to add post');
+        //   }
+        // }}
       >
         <label htmlFor="title">Title:</label>
         <br />
@@ -118,6 +120,11 @@ const IndexPage: NextPageWithLayout = () => {
         <label htmlFor="text">Text:</label>
         <br />
         <textarea id="text" name="text" disabled={addPost.isLoading} />
+        <br />
+        <label htmlFor="file">File:</label>
+        <br />
+        <input type="file" id="file" />
+        <br />
         <br />
         <input type="submit" disabled={addPost.isLoading} />
         {addPost.error && (
