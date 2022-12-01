@@ -29,7 +29,9 @@ export const postRouter = router({
         cursor: z.string().nullish(),
       }),
     )
-    .query(async ({ input }) => {
+    .query(async ({ input, ctx }) => {
+      // ctx.req is optional in inner context
+      console.log(ctx.req?.headers);
       /**
        * For pagination docs you can have a look here
        * @see https://trpc.io/docs/useInfiniteQuery

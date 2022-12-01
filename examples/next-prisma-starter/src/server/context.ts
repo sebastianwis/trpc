@@ -1,18 +1,22 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import * as trpc from '@trpc/server';
 import * as trpcNext from '@trpc/server/adapters/next';
+import { CreateNextContextOptions } from '@trpc/server/adapters/next';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface CreateContextOptions {
-  // session: Session | null
+interface CreateContextOptions extends Partial<CreateNextContextOptions> {
+  session?: {
+    userId: string;
+  };
 }
 
 /**
  * Inner function for `createContext` where we create the context.
  * This is useful for testing when we don't want to mock Next.js' request/response
  */
-export async function createContextInner(_opts: CreateContextOptions) {
-  return {};
+export async function createContextInner(opts?: CreateContextOptions) {
+  return {
+    ...opts,
+  };
 }
 
 export type Context = trpc.inferAsyncReturnType<typeof createContextInner>;
