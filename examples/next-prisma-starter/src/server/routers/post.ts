@@ -2,7 +2,7 @@
  *
  * This is an example router, you can delete this file and then update `../pages/api/trpc/[trpc].tsx`
  */
-import { router, publicProcedure } from '../trpc';
+import { router, publicProcedure, apiProcedure } from '../trpc';
 import { Prisma } from '@prisma/client';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
@@ -22,7 +22,7 @@ const defaultPostSelect = Prisma.validator<Prisma.PostSelect>()({
 });
 
 export const postRouter = router({
-  list: publicProcedure
+  list: apiProcedure
     .input(
       z.object({
         limit: z.number().min(1).max(100).nullish(),
@@ -31,7 +31,7 @@ export const postRouter = router({
     )
     .query(async ({ input, ctx }) => {
       // ctx.req is optional in inner context
-      console.log(ctx.req?.headers);
+      console.log(ctx.req.headers);
       /**
        * For pagination docs you can have a look here
        * @see https://trpc.io/docs/useInfiniteQuery

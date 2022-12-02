@@ -46,3 +46,16 @@ export const middleware = t.middleware;
  * @see https://trpc.io/docs/v10/merging-routers
  */
 export const mergeRouters = t.mergeRouters;
+
+export const apiProcedure = publicProcedure.use((opts) => {
+  if (!opts.ctx.req || !opts.ctx.res) {
+    throw new Error("You can't call this fn through SSG");
+  }
+  return opts.next({
+    ctx: {
+      // These are now non-nullable
+      req: opts.ctx.req,
+      res: opts.ctx.res,
+    },
+  });
+});
